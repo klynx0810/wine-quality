@@ -38,8 +38,13 @@ for feat in features:
     val = st.number_input(f"{feat}", min_value=0.0, step=0.1)
     inputs.append(val)
 
-# Dự đoán
 if st.button("Dự đoán"):
     X_input = np.array([inputs])
+
+    # Nếu chọn Logistic Regression, drop 3 cột đã loại khi train
+    if selected_model_name == 'Logistic Regression':
+        drop_indices = [features.index(f) for f in ['fixed acidity', 'free sulfur dioxide', 'residual sugar']]
+        X_input = np.delete(X_input, drop_indices, axis=1)
+
     prediction = model.predict(X_input)[0]
-    st.success(f"✅ [{selected_model_name}] dự đoán chất lượng: {prediction}")
+    st.success(f"[{selected_model_name}] dự đoán chất lượng: {prediction}")
